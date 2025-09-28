@@ -1,0 +1,28 @@
+# create/overwrite .gitignore with recommended contents
+@"
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# VS Code workspace
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data and reports (do not commit heavy data)
+data/
+reports/
+
+# But if you want to keep small sample data, remove data/ from this file
+"@ > .gitignore
+
+# show .gitignore to confirm
+Get-Content .gitignore
