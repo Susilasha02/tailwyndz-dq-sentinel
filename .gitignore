@@ -7,10 +7,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Ignore data root by default (do not commit large raw datasets)
+# Ignore raw data by default
 data/
 
-# But explicitly allow small cleaned datasets and key lookup files that we need for CI
+# But explicitly allow small cleaned datasets and key lookup files used in CI
 !data/cleaned/
 !data/cleaned/*
 !data/calendar.csv
