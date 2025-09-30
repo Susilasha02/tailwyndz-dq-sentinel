@@ -1,28 +1,22 @@
-# create/overwrite .gitignore with recommended contents
 @"
-# Python bytecode and caches
+# Python / editor / OS
 __pycache__/
 *.py[cod]
-*.pyo
-
-# Virtual environments
 .venv/
-venv/
-env/
-
-# VS Code workspace
 .vscode/
-
-# OS files
 .DS_Store
 Thumbs.db
 
-# Data and reports (do not commit heavy data)
+# Ignore data root by default (do not commit large raw datasets)
 data/
-reports/
 
-# But if you want to keep small sample data, remove data/ from this file
+# But explicitly allow small cleaned datasets and key lookup files that we need for CI
+!data/cleaned/
+!data/cleaned/*
+!data/calendar.csv
+!data/promos.csv
+
+# Reports produced by CI (allow them if present locally)
+!reports/
+!reports/*
 "@ > .gitignore
-
-# show .gitignore to confirm
-Get-Content .gitignore
