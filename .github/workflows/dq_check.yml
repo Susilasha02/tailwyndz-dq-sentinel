@@ -10,6 +10,10 @@ on:
 jobs:
   run-dq:
     runs-on: ubuntu-latest
+    env:
+      GH_USER: Susilasha02
+      REPONAME: tailwyndz-dq-sentinel
+      BRANCH_WITH_CLEANED: cleaned-data
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,54 +33,46 @@ jobs:
           pip install --prefer-binary -r requirements.txt || pip install -r requirements.txt
           pip install pytest
 
-      - name: Prepare cleaned data (create data/cleaned and run cleaning scripts)
+      - name: Prepare cleaned data (download from cleaned-data branch)
         run: |
           set -e
-          # Ensure cleaned dir exists
           mkdir -p data/cleaned
+          cd data
 
-          # Helper: run dedupe/TZ fixer if script exists, otherwise fallback to copying the original
-          run_fix_or_copy() {
-            local src="$1"
-            local script="$2"
-            local out="data/cleaned/$(basename "$src")"
-            if [ -f "$script" ]; then
-              echo "Running $script on $src -> $out"
-              python "$script" "$src" || { echo "Script failed; copying original"; cp "$src" "$out"; }
+          FILES=(
+            "cleaned/sales_weekly_dupes.csv"
+            "cleaned/sales_weekly_partial_backfill.csv"
+            "cleaned/sales_weekly_schema_v2.csv"
+            "sales_weekly.csv"
+            "sales_weekly_level_shift.csv"
+            "sales_weekly_season_break.csv"
+            "sales_weekly_tz_shift.csv"
+            "sales_weekly_unit_mixup.csv"
+            "sales_weekly_partial_backfill.csv"
+            "calendar.csv"
+            "promos.csv"
+          )
+
+          base="https://raw.githubusercontent.com/${GH_USER}/${REPONAME}/${BRANCH_WITH_CLEANED}/"
+
+          echo "Downloading cleaned files from branch: ${BRANCH_WITH_CLEANED}"
+          for f in "${FILES[@]}"; do
+            url="${base}${f}"
+            dest="$(basename "$f")"
+            echo "Attempting: $url -> data/$dest"
+            if curl --fail --show-error -s -o "${dest}" "${url}"; then
+              echo "Downloaded ${dest}"
             else
-              echo "Script $script not found, copying $src -> $out"
-              cp "$src" "$out"
-            fi
-          }
-
-          # Run fixes for known problematic files (adjust names if your scripts have different names)
-          if [ -f data/sales_weekly_dupes.csv ]; then
-            run_fix_or_copy data/sales_weekly_dupes.csv scripts/fix_dup.py
-          fi
-
-          if [ -f data/sales_weekly_partial_backfill.csv ]; then
-            run_fix_or_copy data/sales_weekly_partial_backfill.csv scripts/fix_dup.py
-          fi
-
-          if [ -f data/sales_weekly_schema_v2.csv ]; then
-            run_fix_or_copy data/sales_weekly_schema_v2.csv scripts/fix_schema_v2.py
-          fi
-
-          # For the rest of the sales_weekly*.csv files, copy them to cleaned if not already created
-          for f in data/sales_weekly*.csv; do
-            base=$(basename "$f")
-            if [ ! -f "data/cleaned/$base" ]; then
-              echo "Copying $f -> data/cleaned/$base"
-              cp "$f" "data/cleaned/$base"
-            else
-              echo "data/cleaned/$base already present (created by cleaner)"
+              echo "Warning: could not download ${url} (file may not exist in branch)."
             fi
           done
+
+          cd ..
 
       - name: Run unit tests
         run: pytest -q
 
-      - name: Run DQ sentinel (uses data/cleaned)
+      - name: Run DQ sentinel (uses data/cleaned if available)
         run: |
           python src/dq_sentinel.py --data-dir data/cleaned --out-dir reports/ci --calendar data/calendar.csv --promos data/promos.csv --pattern "sales_weekly*.csv"
 
