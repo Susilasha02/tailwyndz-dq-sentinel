@@ -1,5 +1,5 @@
 @"
-# default ignores
+# Basic ignores
 __pycache__/
 *.py[cod]
 .venv/
@@ -7,20 +7,19 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Keep ignoring raw data root (avoid committing huge raw datasets)
+# Ignore large raw data root by default
 data/
 
-# Allow cleaned outputs and the consolidated cleaned_timeseries
+# But explicitly allow cleaned outputs and essential lookup files
 !data/cleaned/
 !data/cleaned/*
-!data/cleaned_timeseries.csv
+!data/calendar.csv
+!data/promos.csv
 !data/cleaned_timeseries.csv
 
-# Allow reports and plots 
+# Allow reports and plots (CI outputs)
 !reports/
 !reports/*
 !reports/plots/
 !reports/plots/*
-
-
-"@ > .gitignore
+"@ 
