@@ -1,0 +1,4 @@
+file,blocking,blocking_reasons,duplicate_count,pct_backfilled,suspected_unit_price_mixup,level_shift_groups
+sales_weekly_dupes.csv,PASS,,0,0.0,False,0
+sales_weekly_partial_backfill.csv,PASS,,0,0.0,False,0
+sales_weekly_schema_v2.csv,PASS,,0,0.0,False,0

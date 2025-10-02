@@ -1,0 +1,76 @@
+{
+  "file": "sales_weekly_dupes.csv",
+  "analyzed_at": "2025-10-02T07:48:58.707938Z",
+  "schema": {
+    "missing_columns": [],
+    "extra_columns": [
+      "load_ts_parsed"
+    ],
+    "schema_ok": true
+  },
+  "schema_versioning": {
+    "status": "ok",
+    "schema_changed": true,
+    "missing": [],
+    "extra": [
+      "load_ts_parsed"
+    ],
+    "hint": "Missing columns: []. Extra columns: ['load_ts_parsed']."
+  },
+  "duplicates": {
+    "status": "ok",
+    "pk": [
+      "week_start",
+      "sku_id",
+      "store_id"
+    ],
+    "duplicate_count": 0,
+    "sample": []
+  },
+  "continuity": {
+    "status": "ok",
+    "groups_total": 15,
+    "groups_with_gaps": 0,
+    "gap_examples": []
+  },
+  "level_shift": {
+    "status": "ok",
+    "groups_tested": 15,
+    "groups_with_level_shift": 0,
+    "examples": []
+  },
+  "unit_price_mixup": {
+    "status": "ok",
+    "price_median": 16.88,
+    "units_median": 48.0,
+    "ratio_units_to_price": 2.843601895734597,
+    "suspected_unit_price_mixup": false,
+    "hint": ""
+  },
+  "partial_backfill": {
+    "status": "ok",
+    "count_checked": 1200,
+    "count_backfilled": 0,
+    "pct_backfilled": 0.0,
+    "hint": ""
+  },
+  "tz_shift": {
+    "status": "ok",
+    "tz_variants": [],
+    "duplicate_pk_count": 0,
+    "suspicious": false,
+    "hint": ""
+  },
+  "seasonality": {
+    "status": "ok",
+    "n_weeks": 80,
+    "acf_lag1": 0.7922794575950199,
+    "acf_lag52": 0.2734149564011921
+  },
+  "promo_calendar": {
+    "status": "no_big_changes",
+    "hints": []
+  },
+  "blocking_reasons": [],
+  "blocking": "PASS"
+}

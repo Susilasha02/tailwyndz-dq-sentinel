@@ -1,5 +1,10 @@
-This pack contains a **clean baseline** and multiple **faulty variants** to test a Data Quality Sentinel for weekly retail time-series.
 
+# DQ Sentinel — Tailwyndz Propel Assignment
+
+This repository contains a small Data Quality (DQ) sentinel for weekly retail time-series data.  
+It implements a set of checks (schema, duplicates/timezone anomalies, backfill detection, level shifts, unit/price mix-ups, and basic cadence checks), produces per-file JSON outputs and a summary CSV, and includes a small CI pipeline to run the checks automatically.
+
+---
 ## Files
 
 - `sales_weekly.csv` — clean baseline (80 Mondays from 2023-01-02 to 2024-07-08, 5 SKUs × 3 stores)
@@ -24,3 +29,14 @@ Use `(week_start, sku_id, store_id)` as the natural key.
 - Exit code: `0` (green), `2` (amber), `3` (red)
 - Artifacts: `dq_report.html`, `dq_findings.csv`, `dq_summary.json`
 
+
+## Reproducible environment
+
+Use a Python virtual environment and install dependencies from `requirements.txt`.
+
+Windows PowerShell:
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
